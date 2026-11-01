@@ -69,7 +69,8 @@ section{padding:6.5rem 0}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2rem}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.6rem;display:flex;flex-direction:column;transition:transform .4s,box-shadow .4s;position:relative}
 .card:hover{transform:translateY(-5px);box-shadow:0 22px 40px -26px rgba(20,35,26,.35)}
-.card .th{height:150px;border-radius:14px;background:var(--bg2);display:flex;align-items:flex-end;justify-content:center;margin-bottom:1.2rem;overflow:hidden}
+.card .th{position:relative;height:190px;border-radius:14px;background:var(--bg2);display:flex;align-items:flex-end;justify-content:center;margin-bottom:1.2rem;overflow:hidden}
+.card .th .pi{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .card .th svg{height:100px;width:auto}
 .new{position:absolute;top:1.2rem;left:1.2rem;background:var(--amb);color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;padding:.25rem .6rem;border-radius:999px}
 .card h3{font:600 1.02rem/1.3 Manrope,sans-serif;letter-spacing:0;margin-bottom:.7rem}
@@ -154,6 +155,20 @@ nav{display:none}.logo img{height:40px}.bar{gap:.5rem;padding:.4rem .5rem .4rem 
 .cm-list a{padding:1rem;font-size:17px}
 body.cm-open #ai-chat-widget{display:none}
 }
+
+/* catalog v2 */
+.card .th{height:230px}
+.card .th .pi{object-position:center 38%}
+.dots{position:absolute;left:0;right:0;bottom:.2rem;display:flex;justify-content:center;gap:.1rem;z-index:2}
+.dot{width:24px;height:24px;padding:8px;border:0;background:rgba(255,255,255,.7);background-clip:content-box;border-radius:50%;cursor:pointer;filter:drop-shadow(0 0 2px rgba(0,0,0,.55))}
+.dot.on{background-color:#fff;background-clip:content-box}
+.pc{font-size:12px;color:var(--mute);margin-bottom:.2rem}
+.pt{width:100%;border-collapse:collapse;margin:0 0 1.1rem;font-size:.88rem}
+.pt td{padding:.4rem 0;border-top:1px dashed var(--line);vertical-align:baseline}
+.pt td:last-child{text-align:right;white-space:nowrap;padding-left:.8rem}
+.pt b{font:600 1rem Unbounded,sans-serif}.pt s{color:var(--mute);font-size:.8rem;margin-right:.5rem}
+.pq{font:700 1rem Manrope,sans-serif;margin-bottom:1rem}
+.chips{max-width:100%}
 </style>
 </head>
 <body>
@@ -202,9 +217,9 @@ body.cm-open #ai-chat-widget{display:none}
 
 <section id="catalog" style="padding-top:2rem"><div class="w">
 <div class="sh fu"><div><span class="kick">Каталог</span><h2>Сеянцы и саженцы</h2></div>
-<div class="chips" id="chips"><button class="chip on" data-f="all">Все</button><button class="chip" data-f="s">Сеянцы</button><button class="chip" data-f="z">Саженцы</button></div></div>
+<div class="chips" id="chips"></div></div>
 <div class="cards" id="cards"></div>
-<p class="fu" style="margin-top:1.2rem;color:var(--mute);font-size:13px">Крупная цена — новая, действующая. Зачёркнутая — прежняя. Бейдж показывает размер скидки. Все цены за 1 шт.</p>
+<p class="fu" style="margin-top:1.2rem;color:var(--mute);font-size:13px">Цены указаны за 1 шт. и зависят от размера растения и объёма заказа. Наличие и сроки подтверждает менеджер.</p>
 </div></section>
 
 <section id="delivery" style="padding-top:2rem"><div class="w">
@@ -252,26 +267,40 @@ body.cm-open #ai-chat-widget{display:none}
 <footer><div class="w fr"><span>© ЛесниковВ · питомник хвойных</span><span>Нижегородская обл., Кулебакский р-н, с. Теплово, ул. Новая, д. 12</span></div>
 <div class="w fr" style="margin-top:.5rem"><span>ИНН 525102368416 · ОГРНИП 318527500022995</span><span>Цены указаны за 1 шт.</span></div></footer>
 
+<script src="catalog-data.js"></script>
 <script>
 (function(){
-var P=[
-{n:"Сеянцы сосны с закрытой корневой системой",t:"s",p:11,o:15,l:["Высота от 8 см","Толщина стволика от 2 мм","Торфяная ячейка 95 см³"],i:"sd"},
-{n:"Сеянцы сосны обыкновенной с открытой корневой системой",t:"s",p:3,l:["Высота от 12 см","Толщина стволика от 2 мм","Длина корней от 15 см"],i:"sd"},
-{n:"Сеянцы ели европейской с закрытой корневой системой",t:"s",p:12,l:["Высота от 8 см","Толщина стволика от 2 мм","Торфяная ячейка 95 см³"],i:"sd"},
-{n:"Саженцы сосны обыкновенной с закрытой корневой системой",t:"z",p:50,o:80,nw:1,l:["Высота 40–50 см","Для доращивания и посадок на участках","Лесопарки и компенсационное озеленение"],i:"sc"},
-{n:"Саженцы сосны обыкновенной, контейнер С3",t:"z",p:150,o:180,nw:1,l:["Высота 50–60 см","Для бонсаев, ниваки, питомников","Озеленение городов и личных хозяйств"],i:"sc"},
-{n:"Ель европейская, контейнер С3",t:"z",p:180,o:200,nw:1,l:["Высота 40–50 см","Живые изгороди и одиночные посадки","Городское озеленение, доращивание"],i:"sc"}];
+var D0=window.CATALOG||{products:[],prices:[]},P=D0.products||[],R=D0.prices||[];
+P.forEach(function(x){var g={},o=[];R.forEach(function(r){if(r.id!==x.id)return;var k=r.v||'';if(!g[k]){g[k]=[];o.push(k)}g[k].push(r)});
+x.vs=o.map(function(k){return{v:k,t:g[k].sort(function(a,b){return a.f-b.f})}});x.img=x.img||[];x.lines=x.lines||[]});
+var F=[];P.forEach(function(x,k){x.fi=F.length;x.vs.forEach(function(w){F.push({k:k,name:x.name+(w.v?' — '+w.v:''),t:w.t,cat:x.cat})})});
 var C=document.getElementById('cards'),S=document.getElementById('cs');
 function fmt(n){return n.toLocaleString('ru-RU')}
-function render(f){C.innerHTML=P.map(function(x,k){if(f!=='all'&&x.t!==f)return'';
-return '<div class="card fu in">'+(x.nw?'<span class="new">NEW</span>':'')+(x.img?'<div class="th" style="background:url('+x.img+') center/cover"></div>':'<div class="th"><svg viewBox="0 0 100 130"><use href="#'+x.i+'"/></svg></div>')+'<h3>'+x.n+'</h3><ul>'+x.l.map(function(a){return'<li>'+a+'</li>'}).join('')+'</ul><div class="pr"><b>'+String(x.p).replace('.',',')+' ₽</b>'+(x.o?'<s>'+x.o+' ₽</s><em class="off">−'+Math.round((x.o-x.p)/x.o*100)+'%</em>':'')+'<span>за 1 шт.</span></div><button class="btn b3 sm" data-k="'+k+'">В заявку</button></div>'}).join('')+(f==='all'?'<div class="card soon"><h3>Скоро в продаже</h3><ul><li>Сеянцы кедровой сосны с ЗКС</li><li>Сеянцы пихты кавказской с ЗКС</li><li>Декоративные культуры на доращивание</li><li>Хвойные и лиственные в контейнерах</li></ul></div>':'')}
-render('all');
-S.innerHTML=P.map(function(x,k){return'<option value="'+k+'">'+x.n+'</option>'}).join('');
+function unit(t,q){var p=t[0].p;t.forEach(function(r){if(q>=r.f)p=r.p});return p}
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
+function ptab(x){if(!x.vs.length)return'<div class="pq">Цена по запросу</div>';
+var h='<div class="pc">Цена за 1 шт.</div><table class="pt">';
+x.vs.forEach(function(w){w.t.forEach(function(r){var lab=[w.v,r.c].filter(Boolean).join(' · ');
+h+='<tr><td>'+esc(lab)+'</td><td>'+(r.o>r.p?'<s>'+fmt(r.o)+' ₽</s>':'')+'<b>'+fmt(r.p)+' ₽</b></td></tr>'})});
+return h+'</table>'}
+function card(x,k){return '<div class="card fu in" data-i="'+k+'">'+(x.badge?'<span class="new">'+esc(x.badge)+'</span>':'')+
+'<div class="th"><svg viewBox="0 0 100 130"><use href="#'+(x.cat==='Сеянцы'?'sd':'sc')+'"/></svg>'+
+(x.img.length?'<img class="pi" src="'+esc(x.img[0])+'" alt="'+esc(x.name)+'" loading="lazy" onerror="this.remove()">':'')+
+(x.img.length>1?'<div class="dots">'+x.img.map(function(_,j){return'<button type="button" class="dot'+(j?'':' on')+'" data-g="'+j+'" aria-label="Фото '+(j+1)+'"></button>'}).join('')+'</div>':'')+'</div>'+
+'<h3>'+esc(x.name)+'</h3><ul>'+x.lines.map(function(a){return'<li>'+esc(a)+'</li>'}).join('')+'</ul>'+ptab(x)+
+'<button class="btn b3 sm" data-k="'+k+'">'+(x.vs.length?'В заявку':'Запросить цену')+'</button></div>'}
+function render(f){C.innerHTML=P.length?P.map(function(x,k){return f&&x.cat!==f?'':card(x,k)}).join('')+(f?'':'<div class="card soon"><h3>Скоро в продаже</h3><ul><li>Сеянцы кедровой сосны с ЗКС</li><li>Сеянцы пихты кавказской с ЗКС</li><li>Декоративные культуры на доращивание</li></ul></div>'):'<p style="grid-column:1/-1">Каталог временно недоступен. Позвоните нам: +7 902 783-59-36.</p>'}
+var CH=document.getElementById('chips'),cats=[];P.forEach(function(x){if(cats.indexOf(x.cat)<0)cats.push(x.cat)});
+CH.innerHTML='<button class="chip on" data-f="">Все</button>'+cats.map(function(c){return'<button class="chip" data-f="'+esc(c)+'">'+esc(c)+'</button>'}).join('');
+render('');
+var cur=null,og;F.forEach(function(f,i){if(f.cat!==cur){cur=f.cat;og=document.createElement('optgroup');og.label=cur;S.appendChild(og)}var o=document.createElement('option');o.value=i;o.textContent=f.name;og.appendChild(o)});
 var Q=document.getElementById('cq'),T=document.getElementById('ct');
-function calc(){var q=Math.max(0,+Q.value||0);T.textContent=fmt(Math.round(P[S.value].p*q*100)/100)+' ₽'}
+function calc(){var f=F[S.value];if(!f){T.textContent='—';return}var q=Math.max(0,+Q.value||0),u=unit(f.t,q);T.textContent=fmt(Math.round(u*q*100)/100)+' ₽';T.previousElementSibling.textContent='Ориентировочно ('+fmt(u)+' ₽/шт.)'}
 S.onchange=Q.oninput=calc;calc();
-document.getElementById('chips').onclick=function(e){var b=e.target.closest('.chip');if(!b)return;document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('on')});b.classList.add('on');render(b.dataset.f)};
-C.onclick=function(e){var b=e.target.closest('[data-k]');if(!b)return;S.value=b.dataset.k;calc();document.getElementById('order').scrollIntoView({behavior:'smooth'})};
+CH.onclick=function(e){var b=e.target.closest('.chip');if(!b)return;CH.querySelectorAll('.chip').forEach(function(c){c.classList.remove('on')});b.classList.add('on');render(b.dataset.f)};
+C.onclick=function(e){var d=e.target.closest('[data-g]');
+if(d){var c=d.closest('.card'),im=c.querySelector('.pi');if(im){im.src=P[+c.dataset.i].img[+d.dataset.g];c.querySelectorAll('.dot').forEach(function(t){t.classList.toggle('on',t===d)})}return}
+var b=e.target.closest('[data-k]');if(!b)return;var x=P[+b.dataset.k];if(x.vs.length){S.value=x.fi;calc()}document.getElementById('order').scrollIntoView({behavior:'smooth'})};
 var D=[[2018,5000],[2019,8000],[2020,10000],[2022,15000],[2023,60000]],B=document.getElementById('bars');
 B.innerHTML='<div class="u" style="font-size:.9rem;margin-bottom:1.4rem">Передано безвозмездно, шт.</div>'+D.map(function(d){return'<div class="bar2"><span>'+d[0]+'</span><div><i data-w="'+Math.max(6,d[1]/600)+'"></i></div><b>'+fmt(d[1])+'+</b></div>'}).join('');
 var fm=document.getElementById('fm');
@@ -280,7 +309,7 @@ fm.onchange=function(){mode(fm.value)};
 document.querySelectorAll('[data-go]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();if(a.dataset.mode)mode(a.dataset.mode);document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'})})});
 document.querySelectorAll('a[href^="#"]:not([data-go])').forEach(function(a){a.addEventListener('click',function(e){var h=a.getAttribute('href');var t=h.length>1&&document.querySelector(h);if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}})});
 document.getElementById('f1').onsubmit=function(e){e.preventDefault();
-var ch=fm.value==='ch';var m=(ch?'Благотворительная заявка':'Заказ')+'\nИмя: '+fn.value+(ch?'\nОрганизация: '+fo2.value:'\nРастение: '+P[S.value].n+', '+Q.value+' шт. (≈ '+T.textContent+')\nСрок: '+fd.value)+'\nКонтакт: '+fc.value+(fx.value?'\nКомментарий: '+fx.value:'');
+var ch=fm.value==='ch';var m=(ch?'Благотворительная заявка':'Заказ')+'\nИмя: '+fn.value+(ch?'\nОрганизация: '+fo2.value:'\nРастение: '+F[S.value].name+', '+Q.value+' шт. (≈ '+T.textContent+')\nСрок: '+fd.value)+'\nКонтакт: '+fc.value+(fx.value?'\nКомментарий: '+fx.value:'');
 var o=document.getElementById('ok');o.style.display='block';
 var q=encodeURIComponent(m);o.innerHTML='Заявка собрана. Отправьте любым способом: <a href="mailto:Kbe83@mail.ru?subject='+encodeURIComponent(ch?'Благотворительная заявка':'Заказ растений')+'&body='+q+'"><b>по почте</b></a> · <a href="https://wa.me/79027835936?text='+q+'" target="_blank" rel="noopener"><b>WhatsApp</b></a> · <a href="https://t.me/LesnikovVE" target="_blank" rel="noopener"><b>Telegram</b></a> · <a href="#" id="cpy"><b>скопировать текст</b></a>';document.getElementById('cpy').onclick=function(ev){ev.preventDefault();try{navigator.clipboard.writeText(m);ev.target.textContent='скопировано'}catch(x){}}};
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll&&e.target.querySelectorAll('i[data-w]').forEach(function(i){i.style.width=i.dataset.w+'%'});io.unobserve(e.target)}})},{threshold:.12});
