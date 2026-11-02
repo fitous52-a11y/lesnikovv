@@ -169,6 +169,40 @@ body.cm-open #ai-chat-widget{display:none}
 .pt b{font:600 1rem Unbounded,sans-serif}.pt s{color:var(--mute);font-size:.8rem;margin-right:.5rem}
 .pq{font:700 1rem Manrope,sans-serif;margin-bottom:1rem}
 .chips{max-width:100%}
+
+/* cart */
+.buy{display:grid;gap:.6rem}
+.card .bv,.card .bq{width:100%;padding:.62rem .8rem;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:600 14px Manrope,sans-serif;margin:0}
+.br{display:flex;gap:.6rem}.card .bq{width:96px;flex:none}.br .btn{flex:1}
+.cartfab{position:fixed;left:1rem;bottom:1rem;z-index:900;display:flex;align-items:center;gap:.5rem;padding:.75rem 1.1rem;border:0;border-radius:999px;background:var(--g2);color:#fff;font:700 14px Manrope,sans-serif;cursor:pointer;box-shadow:0 10px 26px -8px rgba(0,0,0,.55)}
+:root[data-theme="dark"] .cartfab{background:var(--lime);color:#13321f}
+.cartfab b{background:var(--amb);color:#fff;border-radius:999px;min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;padding:0 6px}
+.cartfab.bump{animation:cbump .35s}
+@keyframes cbump{50%{transform:scale(1.12)}}
+.cartov{position:fixed;inset:0;background:rgba(10,20,14,.55);z-index:1200}
+.cartdr{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--card);color:var(--ink);z-index:1210;display:flex;flex-direction:column;box-shadow:-20px 0 50px -20px rgba(0,0,0,.5)}
+.cartfab[hidden],.cartov[hidden],.cartdr[hidden],.cdc[hidden],.cartnote[hidden]{display:none!important}
+.cdh{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.3rem;border-bottom:1px solid var(--line)}
+.cdh h3{font:600 1.2rem Manrope,sans-serif;letter-spacing:0}
+.cdx{border:0;background:transparent;font-size:20px;cursor:pointer;color:var(--ink);padding:.3rem .5rem}
+.cdl{flex:1;overflow:auto;padding:.3rem 1.3rem}
+.ci{padding:1rem 0;border-bottom:1px dashed var(--line)}
+.cit b{display:block;font:600 .95rem/1.3 Manrope,sans-serif}.cit span{font-size:.85rem;color:var(--mute)}
+.cir{display:flex;align-items:center;gap:.7rem;margin-top:.6rem}
+.qs{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:999px;overflow:hidden}
+.qs button{width:34px;height:34px;border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--ink)}
+.qs input{width:62px;border:0;background:transparent;text-align:center;font:700 14px Manrope,sans-serif;color:var(--ink);padding:0;margin:0;border-radius:0}
+.cip{margin-left:auto;text-align:right;font-size:12px;color:var(--mute);line-height:1.3}.cip b{display:block;font:600 1rem Unbounded,sans-serif;color:var(--ink)}
+.cix{border:0;background:transparent;cursor:pointer;color:var(--mute);font-size:16px;padding:.3rem}
+.cdempty{padding:2.5rem 0;color:var(--mute);text-align:center}
+.cdf{padding:1rem 1.3rem 1.3rem;border-top:1px solid var(--line)}
+.cdt{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem}
+.cdt b{font:500 1.5rem Unbounded,sans-serif}
+.cdn{font-size:12px;color:var(--mute);margin-bottom:1rem}
+.cdc{display:block;margin:.8rem auto 0;border:0;background:transparent;color:var(--mute);font:600 13px Manrope,sans-serif;cursor:pointer;text-decoration:underline}
+#cartGo:disabled{opacity:.5;cursor:not-allowed}
+.cartnote{margin-bottom:1rem;padding:.9rem 1rem;border-radius:14px;background:rgba(198,232,107,.14);border:1px solid rgba(198,232,107,.4);font-size:14px}
+.cartnote a{color:var(--lime);font-weight:700}
 </style>
 </head>
 <body>
@@ -225,6 +259,7 @@ body.cm-open #ai-chat-widget{display:none}
 <section id="delivery" style="padding-top:2rem"><div class="w">
 <div class="sh fu"><div><span class="kick">Доставка и сроки</span><h2>Привезём или заберёте сами</h2></div></div>
 <div class="fu"><div class="dr"><h3>🚚 Транспортные компании</h3><p>ПЭК, СДЭК, Деловые линии, Энергия, Байкал Сервис, КИТ.</p></div>
+<div class="dr"><h3>🛍️ Доставка Ozon</h3><p>Для небольших партий отправляем через Ozon. Стоимость и сроки зависят от вашего региона и размера заказа, уточняйте у менеджера.</p></div>
 <div class="dr"><h3>🚛 Доставка автомобилем</h3><p>Газель, Валдай, КамАЗ (6 м), фура: тент или рефрижератор.</p></div>
 <div class="dr"><h3>📍 Самовывоз</h3><p>Нижегородская область, Кулебакский район, с. Теплово, ул. Новая, д. 12.</p></div>
 <div class="dr"><h3>📦 Упаковка</h3><p>Картонный короб, многоярусные деревянные стеллажи или любой вид по согласованию с клиентом.</p></div></div>
@@ -243,6 +278,7 @@ body.cm-open #ai-chat-widget{display:none}
 
 <div class="order" id="order"><div class="w og">
 <div><span class="kick">Заказ</span><h2>Посчитайте и оставьте заявку</h2><p class="lead">Выберите растение и количество. Мы подтвердим наличие и сроки и свяжемся с вами.</p>
+<div class="cartnote" id="cartNote" hidden><span id="cartNoteT"></span> <a href="#" id="cartOpen">Открыть корзину</a></div>
 <div class="calc"><label for="cs">Растение</label><select id="cs"></select><label for="cq">Количество, шт.</label><input id="cq" type="number" min="1" value="1000"><div class="tot"><span>Ориентировочно</span><b id="ct">0 ₽</b></div><div style="font-size:12px;opacity:.65;margin-top:.5rem">Минимальная партия — от 1 шт. Без учёта доставки; итоговую цену подтверждает менеджер.</div></div>
 <div class="ct"><a href="tel:+79027835936">📞 +7 902 783-59-36</a><a href="mailto:Kbe83@mail.ru">✉️ Kbe83@mail.ru</a></div>
 <div class="soc"><a class="btn b2 sm" style="color:#f2f5e4" href="https://t.me/LesnikovVE" target="_blank" rel="noopener">Telegram</a><a class="btn b2 sm" style="color:#f2f5e4" href="https://wa.me/79027835936" target="_blank" rel="noopener">WhatsApp</a><a class="btn b2 sm" style="color:#f2f5e4" href="https://vk.com/club225584068" target="_blank" rel="noopener">VK</a></div></div>
@@ -267,6 +303,16 @@ body.cm-open #ai-chat-widget{display:none}
 <footer><div class="w fr"><span>© ЛесниковВ · питомник хвойных</span><span>Нижегородская обл., Кулебакский р-н, с. Теплово, ул. Новая, д. 12</span></div>
 <div class="w fr" style="margin-top:.5rem"><span>ИНН 525102368416 · ОГРНИП 318527500022995</span><span>Цены указаны за 1 шт.</span></div></footer>
 
+<button type="button" class="cartfab" id="cartFab" hidden aria-label="Открыть корзину">🛒 <span>Корзина</span> <b id="cartN">0</b></button>
+<div class="cartov" id="cartOv" hidden></div>
+<aside class="cartdr" id="cartDr" role="dialog" aria-modal="true" aria-label="Корзина" hidden>
+<div class="cdh"><h3>Корзина</h3><button type="button" class="cdx" id="cartX" aria-label="Закрыть">✕</button></div>
+<div class="cdl" id="cartList"></div>
+<div class="cdf"><div class="cdt"><span>Итого ориентировочно</span><b id="cartSum">0 ₽</b></div>
+<p class="cdn">Цена за штуку зависит от количества. Без учёта доставки; наличие и итоговую цену подтверждает менеджер.</p>
+<button type="button" class="btn b3" id="cartGo" style="width:100%">Оформить заявку →</button>
+<button type="button" class="cdc" id="cartClr">Очистить корзину</button></div>
+</aside>
 <script src="catalog-data.js"></script>
 <script>
 (function(){
@@ -288,7 +334,9 @@ function card(x,k){return '<div class="card fu in" data-i="'+k+'">'+(x.badge?'<s
 (x.img.length?'<img class="pi" src="'+esc(x.img[0])+'" alt="'+esc(x.name)+'" loading="lazy" onerror="this.remove()">':'')+
 (x.img.length>1?'<div class="dots">'+x.img.map(function(_,j){return'<button type="button" class="dot'+(j?'':' on')+'" data-g="'+j+'" aria-label="Фото '+(j+1)+'"></button>'}).join('')+'</div>':'')+'</div>'+
 '<h3>'+esc(x.name)+'</h3><ul>'+x.lines.map(function(a){return'<li>'+esc(a)+'</li>'}).join('')+'</ul>'+ptab(x)+
-'<button class="btn b3 sm" data-k="'+k+'">'+(x.vs.length?'В заявку':'Запросить цену')+'</button></div>'}
+(x.vs.length?'<div class="buy">'+(x.vs.length>1?'<select class="bv" aria-label="Размер">'+x.vs.map(function(w,j){return'<option value="'+j+'">'+esc(w.v)+' — '+fmt(Math.min.apply(null,w.t.map(function(r){return r.p})))+' ₽</option>'}).join('')+'</select>':'')+
+'<div class="br"><input class="bq" type="number" min="1" value="'+(x.cat==='Сеянцы'?100:1)+'" inputmode="numeric" aria-label="Количество, шт."><button class="btn b3 sm" data-add="'+k+'">В корзину</button></div></div>'
+:'<button class="btn b3 sm" data-k="'+k+'">Запросить цену</button>')+'</div>'}
 function render(f){C.innerHTML=P.length?P.map(function(x,k){return f&&x.cat!==f?'':card(x,k)}).join('')+(f?'':'<div class="card soon"><h3>Скоро в продаже</h3><ul><li>Сеянцы кедровой сосны с ЗКС</li><li>Сеянцы пихты кавказской с ЗКС</li><li>Декоративные культуры на доращивание</li></ul></div>'):'<p style="grid-column:1/-1">Каталог временно недоступен. Позвоните нам: +7 902 783-59-36.</p>'}
 var CH=document.getElementById('chips'),cats=[];P.forEach(function(x){if(cats.indexOf(x.cat)<0)cats.push(x.cat)});
 CH.innerHTML='<button class="chip on" data-f="">Все</button>'+cats.map(function(c){return'<button class="chip" data-f="'+esc(c)+'">'+esc(c)+'</button>'}).join('');
@@ -300,20 +348,51 @@ S.onchange=Q.oninput=calc;calc();
 CH.onclick=function(e){var b=e.target.closest('.chip');if(!b)return;CH.querySelectorAll('.chip').forEach(function(c){c.classList.remove('on')});b.classList.add('on');render(b.dataset.f)};
 C.onclick=function(e){var d=e.target.closest('[data-g]');
 if(d){var c=d.closest('.card'),im=c.querySelector('.pi');if(im){im.src=P[+c.dataset.i].img[+d.dataset.g];c.querySelectorAll('.dot').forEach(function(t){t.classList.toggle('on',t===d)})}return}
+var a=e.target.closest('[data-add]');
+if(a){var cd=a.closest('.card'),px=P[+a.dataset.add],sl=cd.querySelector('.bv'),w=px.vs[sl?+sl.value:0],qn=Math.max(1,parseInt(cd.querySelector('.bq').value,10)||1);cadd(px.id,w.v||'',qn);var tx=a.textContent;a.textContent='Добавлено ✓';a.disabled=true;setTimeout(function(){a.textContent=tx;a.disabled=false},1100);return}
 var b=e.target.closest('[data-k]');if(!b)return;var x=P[+b.dataset.k];if(x.vs.length){S.value=x.fi;calc()}document.getElementById('order').scrollIntoView({behavior:'smooth'})};
 var D=[[2018,5000],[2019,8000],[2020,10000],[2022,15000],[2023,60000]],B=document.getElementById('bars');
 B.innerHTML='<div class="u" style="font-size:.9rem;margin-bottom:1.4rem">Передано безвозмездно, шт.</div>'+D.map(function(d){return'<div class="bar2"><span>'+d[0]+'</span><div><i data-w="'+Math.max(6,d[1]/600)+'"></i></div><b>'+fmt(d[1])+'+</b></div>'}).join('');
 var fm=document.getElementById('fm');
-function mode(v){fm.value=v;document.getElementById('fo').style.display=v==='ch'?'block':'none';document.getElementById('ft').textContent=v==='ch'?'Заявка на благотворительность':'Заявка на заказ'}
+function mode(v){fm.value=v;document.getElementById('fo').style.display=v==='ch'?'block':'none';document.getElementById('ft').textContent=v==='ch'?'Заявка на благотворительность':'Заявка на заказ';cnote()}
 fm.onchange=function(){mode(fm.value)};
 document.querySelectorAll('[data-go]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();if(a.dataset.mode)mode(a.dataset.mode);document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'})})});
 document.querySelectorAll('a[href^="#"]:not([data-go])').forEach(function(a){a.addEventListener('click',function(e){var h=a.getAttribute('href');var t=h.length>1&&document.querySelector(h);if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}})});
 document.getElementById('f1').onsubmit=function(e){e.preventDefault();
-var ch=fm.value==='ch';var m=(ch?'Благотворительная заявка':'Заказ')+'\nИмя: '+fn.value+(ch?'\nОрганизация: '+fo2.value:'\nРастение: '+F[S.value].name+', '+Q.value+' шт. (≈ '+T.textContent+')\nСрок: '+fd.value)+'\nКонтакт: '+fc.value+(fx.value?'\nКомментарий: '+fx.value:'');
+var ch=fm.value==='ch';var m=(ch?'Благотворительная заявка':'Заказ')+'\nИмя: '+fn.value+(ch?'\nОрганизация: '+fo2.value:orderText()+'\nСрок: '+fd.value)+'\nКонтакт: '+fc.value+(fx.value?'\nКомментарий: '+fx.value:'');
 var o=document.getElementById('ok');o.style.display='block';
 var q=encodeURIComponent(m);o.innerHTML='Заявка собрана. Отправьте любым способом: <a href="mailto:Kbe83@mail.ru?subject='+encodeURIComponent(ch?'Благотворительная заявка':'Заказ растений')+'&body='+q+'"><b>по почте</b></a> · <a href="https://wa.me/79027835936?text='+q+'" target="_blank" rel="noopener"><b>WhatsApp</b></a> · <a href="https://t.me/LesnikovVE" target="_blank" rel="noopener"><b>Telegram</b></a> · <a href="#" id="cpy"><b>скопировать текст</b></a>';document.getElementById('cpy').onclick=function(ev){ev.preventDefault();try{navigator.clipboard.writeText(m);ev.target.textContent='скопировано'}catch(x){}}};
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll&&e.target.querySelectorAll('i[data-w]').forEach(function(i){i.style.width=i.dataset.w+'%'});io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.fu').forEach(function(el){io.observe(el)});
+/* cart */
+var CK='lv_cart_v1',CART=[],lastF=null;
+function $(id){return document.getElementById(id)}
+function pl(n){var a=n%10,b=n%100;return b>10&&b<20?'позиций':a===1?'позиция':a>1&&a<5?'позиции':'позиций'}
+function cfind(id,v){for(var i=0;i<P.length;i++){if(P[i].id===id){for(var j=0;j<P[i].vs.length;j++){if((P[i].vs[j].v||'')===v)return{x:P[i],w:P[i].vs[j]}}}}return null}
+function cload(){try{var a=JSON.parse(localStorage.getItem(CK)||'[]');CART=(Array.isArray(a)?a:[]).filter(function(it){return it&&cfind(it.id,it.v||'')&&it.q>=1}).map(function(it){return{id:it.id,v:it.v||'',q:Math.floor(it.q)}})}catch(e){CART=[]}}
+function csave(){try{localStorage.setItem(CK,JSON.stringify(CART))}catch(e){}}
+function cinfo(it){var f=cfind(it.id,it.v),u=unit(f.w.t,it.q);return{x:f.x,w:f.w,u:u,s:Math.round(u*it.q*100)/100}}
+function ctotal(){return Math.round(CART.reduce(function(a,it){return a+cinfo(it).s},0)*100)/100}
+function cadd(id,v,q){var it=CART.filter(function(i){return i.id===id&&i.v===v})[0];if(it)it.q+=q;else CART.push({id:id,v:v,q:q});csave();crender();var fb=$('cartFab');fb.classList.remove('bump');void fb.offsetWidth;fb.classList.add('bump')}
+function cnote(){var n=CART.length,nt=$('cartNote');if(!nt)return;nt.hidden=!n||$('fm').value==='ch';if(n)$('cartNoteT').textContent='🛒 В заявку войдёт корзина: '+n+' '+pl(n)+' на ≈ '+fmt(ctotal())+' ₽. Калькулятор ниже нужен только для быстрой оценки.'}
+function crender(){var n=CART.length;$('cartFab').hidden=!n;$('cartN').textContent=n;var h='';
+CART.forEach(function(it,i){var c=cinfo(it);h+='<div class="ci" data-i="'+i+'"><div class="cit"><b>'+esc(c.x.name)+'</b>'+(it.v?'<span>'+esc(it.v)+'</span>':'')+'</div><div class="cir"><div class="qs"><button type="button" data-q="-1" aria-label="Меньше">−</button><input type="number" min="1" value="'+it.q+'" inputmode="numeric" aria-label="Количество, шт."><button type="button" data-q="1" aria-label="Больше">+</button></div><div class="cip">'+fmt(c.u)+' ₽/шт.<b>'+fmt(c.s)+' ₽</b></div><button type="button" class="cix" data-rm aria-label="Удалить">✕</button></div></div>'});
+$('cartList').innerHTML=h||'<div class="cdempty">Корзина пуста. Добавьте растения из каталога.</div>';
+$('cartSum').textContent=fmt(ctotal())+' ₽';$('cartGo').disabled=!n;$('cartClr').hidden=!n;cnote()}
+function copen(){lastF=document.activeElement;$('cartOv').hidden=$('cartDr').hidden=false;document.documentElement.style.overflow='hidden';$('cartX').focus()}
+function cclose(){$('cartOv').hidden=$('cartDr').hidden=true;document.documentElement.style.overflow='';if(lastF&&lastF.focus)lastF.focus()}
+function orderText(){if(CART.length)return'\nСостав заказа:\n'+CART.map(function(it,i){var c=cinfo(it);return(i+1)+'. '+c.x.name+(it.v?' — '+it.v:'')+': '+fmt(it.q)+' шт. × '+fmt(c.u)+' ₽ = '+fmt(c.s)+' ₽'}).join('\n')+'\nИтого ≈ '+fmt(ctotal())+' ₽';
+var f=F[S.value];return f?'\nРастение: '+f.name+', '+Q.value+' шт. (≈ '+T.textContent+')':''}
+$('cartList').onclick=function(e){var row=e.target.closest('.ci');if(!row)return;var i=+row.dataset.i,it=CART[i],q=e.target.closest('[data-q]');
+if(q){var st=cinfo(it).x.cat==='Сеянцы'?100:1,d=+q.dataset.q;it.q=Math.max(1,d>0?it.q+st-it.q%st:(it.q%st?it.q-it.q%st:it.q-st));csave();crender();return}
+if(e.target.closest('[data-rm]')){CART.splice(i,1);csave();crender()}};
+$('cartList').onchange=function(e){var row=e.target.closest('.ci');if(!row||e.target.type!=='number')return;var v=parseInt(e.target.value,10);CART[+row.dataset.i].q=v>=1?v:1;csave();crender()};
+$('cartFab').onclick=copen;$('cartX').onclick=$('cartOv').onclick=cclose;
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('cartDr').hidden)cclose()});
+$('cartGo').onclick=function(){cclose();mode('o');$('order').scrollIntoView({behavior:'smooth'})};
+$('cartClr').onclick=function(){if(confirm('Очистить корзину?')){CART=[];csave();crender()}};
+$('cartOpen').onclick=function(e){e.preventDefault();copen()};
+cload();crender();
 })();
 
 (function(){
