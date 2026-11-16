@@ -606,6 +606,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!l.hidden){
         d.innerText = text;
         $c('chat-messages').appendChild(d);
         $c('chat-messages').scrollTop = $c('chat-messages').scrollHeight;
+        return d;
     }
     function appendHtml(html, className) {
         const d = document.createElement('div');
