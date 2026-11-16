@@ -546,6 +546,18 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!l.hidden){
             L.catalog() + '\n\nКОРЗИНА КЛИЕНТА: ' + (it.length ? '\n' + L.orderLines() : 'пуста');
     }
 
+    let typingEl = null;
+    function typing(show) {
+        if (show && !typingEl) {
+            typingEl = appendMsg('Иван печатает…', 'ai-msg');
+            typingEl.style.opacity = '.6';
+        } else if (!show && typingEl) {
+            typingEl.remove();
+            typingEl = null;
+        }
+    }
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
     async function sendMessage() {
         const input = $c('chat-input');
         const text = input.value.trim();
@@ -553,24 +565,38 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!l.hidden){
         appendMsg(text, 'user-msg');
         input.value = '';
         const L = LVx(), ctx = chatCtx();
-        try {
-            const response = await fetch(CHAT_API, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: ctx ? ctx + '\n\nВопрос клиента: ' + text : text,
-                    history: chatHistory,
-                    cart: L ? L.items().map(i => ({ id: i.id, variant: i.v, qty: i.q, unit_price: i.u, sum: i.s })) : [],
-                    context: ctx
-                })
-            });
-            const data = await response.json();
-            const aiReply = data.message || data.reply || data.text || data.response || "Извините, произошла ошибка в ответе";
-            appendMsg(aiReply, 'ai-msg');
-            chatHistory.push({ role: "user", content: text });
-            chatHistory.push({ role: "assistant", content: aiReply });
-        } catch (e) {
-            appendMsg("Ой, что-то связь с питомником прервалась!", 'ai-msg');
+        const payload = JSON.stringify({
+            message: ctx ? ctx + '\n\nВопрос клиента: ' + text : text,
+            history: chatHistory,
+            cart: L ? L.items().map(i => ({ id: i.id, variant: i.v, qty: i.q, unit_price: i.u, sum: i.s })) : [],
+            context: ctx
+        });
+        typing(true);
+        // До трёх попыток: первая иногда будит «уснувшую» облачную функцию
+        // (холодный старт), и со второй попытки всё отвечает мгновенно.
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            try {
+                const response = await fetch(CHAT_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: payload
+                });
+                const data = await response.json();
+                typing(false);
+                const aiReply = data.message || data.reply || data.text || data.response || "Извините, произошла ошибка в ответе";
+                appendMsg(aiReply, 'ai-msg');
+                chatHistory.push({ role: "user", content: text });
+                chatHistory.push({ role: "assistant", content: aiReply });
+                return;
+            } catch (e) {
+                if (attempt < 3) {
+                    if (typingEl) typingEl.innerText = 'Соединяю ещё раз (' + attempt + '/2)…';
+                    await sleep(2000);
+                    continue;
+                }
+                typing(false);
+                appendMsg("Ой, что-то связь с питомником прервалась! Попробуйте ещё раз или позвоните нам: +7 902 783-59-36.", 'ai-msg');
+            }
         }
     }
 
