@@ -494,6 +494,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!l.hidden){
     .msg { white-space: pre-wrap; }
     .ai-msg a { color: #2e7d32; font-weight: bold; }
     #chat-send { background: #2e7d32; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; margin-left: 5px; cursor: pointer; }
+    .msg.typing { opacity: .75; font-style: italic; }
+    .tdots span { display: inline-block; animation: tblink 1.2s infinite; font-style: normal; }
+    .tdots span:nth-child(2) { animation-delay: .2s; }
+    .tdots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes tblink { 0%, 60%, 100% { opacity: .25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-2px); } }
 </style>
 
 <div id="ai-chat-widget">
@@ -547,10 +552,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!l.hidden){
     }
 
     let typingEl = null;
-    function typing(show) {
+    function typing(show, note) {
         if (show && !typingEl) {
-            typingEl = appendMsg('Иван печатает…', 'ai-msg');
-            typingEl.style.opacity = '.6';
+            typingEl = appendMsg('', 'ai-msg typing');
+            typingEl.innerHTML = 'Иван печатает<span class="tdots"><span>.</span><span>.</span><span>.</span></span>';
+        } else if (show && note && typingEl) {
+            typingEl.innerHTML = note + '<span class="tdots"><span>.</span><span>.</span><span>.</span></span>';
         } else if (!show && typingEl) {
             typingEl.remove();
             typingEl = null;
@@ -590,7 +597,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!l.hidden){
                 return;
             } catch (e) {
                 if (attempt < 3) {
-                    if (typingEl) typingEl.innerText = 'Соединяю ещё раз (' + attempt + '/2)…';
+                    typing(true, 'Соединяю ещё раз (' + attempt + '/2)');
                     await sleep(2000);
                     continue;
                 }
